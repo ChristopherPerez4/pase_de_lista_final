@@ -891,50 +891,42 @@
 <script src="../../dist/js/demo.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // Realizar una solicitud AJAX para obtener los grupos
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "get_grupos.php", true);
-      xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-              var grupos = JSON.parse(xhr.responseText);
-              var table = document.querySelector("table");
-              var tbody = table.querySelector("tbody");
-  
-              grupos.forEach(function (grupo) {
-                  var row = document.createElement("tr");
-                  row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='ver-grupo' data-id='" + grupo.grupo_id + "'>Ver grupo</button> <button class='ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td>";
-                  tbody.appendChild(row);
-              });
+document.addEventListener("DOMContentLoaded", function () {
+    var urlParams = new URLSearchParams(window.location.search);
+    var idMaestro = urlParams.get("id"); // Obtener el ID del maestro de la URL
 
-              
-  
-              // Agregar un manejador de eventos para los botones "Ver grupo"
-              var verButtonGrupo = document.querySelectorAll(".ver-grupo");
+    // Realizar una solicitud AJAX para obtener los grupos del maestro
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "get_grupos.php?id_maestro=" + idMaestro, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var grupos = JSON.parse(xhr.responseText);
+            var table = document.querySelector("table");
+            var tbody = table.querySelector("tbody");
 
-              verButtonGrupo.forEach(function (button) {
-                  button.addEventListener("click", function () {
-                      var grupoId = this.getAttribute("data-id");
-                      // Redirigir a la vista deseada con el ID del grupo como parámetro
-                      window.location.href = "simple.html?id=" + grupoId;
-                  });
+            grupos.forEach(function (grupo) {
+                var row = document.createElement("tr");
+                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button></td>";
+                tbody.appendChild(row);
+            });
 
+            // Agregar manejadores de eventos para los botones "Ver Grupo"
+            var verButtonGrupo = document.querySelectorAll(".ver-grupo");
 
-              var verButtonAsistencia = document.querySelectorAll(".ver-asistencia");
-              
-              verButtonAsistencia.forEach(function (button) {
-                  button.addEventListener("click", function () {
-                      var grupoId = this.getAttribute("data-id");
-                      // Redirigir a la vista deseada con el ID del grupo como parámetro
-                      window.location.href = "../charts/flot.html?id=" + grupoId;
-                  });
-
+            verButtonGrupo.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var grupoId = this.getAttribute("data-id");
+                    // Redirigir a la vista deseada con el ID del grupo como parámetro
+                    window.location.href = "simple.html?id=" + grupoId;
                 });
-              });
-          }
-      };
-      xhr.send();
-  });
+            });
+        }
+    };
+    xhr.send();
+});
+
+
+
   
   </script>
 
