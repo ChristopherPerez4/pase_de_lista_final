@@ -84,6 +84,22 @@
                   <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
               </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Fecha/Hora</th>
+                        <th>Asistencia</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabla-asistencias">
+                      <!-- Aquí se llenarán las filas de la tabla de asistencias -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -193,6 +209,58 @@
       }
     });
   });
+</script>
+
+<script>
+  // Obtener el parámetro del alumno_id y materia_id de la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const alumnoId = urlParams.get("alumno_id");
+  const materiaId = urlParams.get("materia_id");
+
+  // Obtener elementos HTML
+  const nombreElement = document.getElementById("nombre");
+  const tablaElement = document.getElementById("tabla-asistencias");
+
+  // Hacer una solicitud AJAX para obtener los datos del servidor
+  fetch(`consulta_asistencia_tabla.php?alumno_id=${alumnoId}&materia_id=${materiaId}`)
+      .then((response) => response.json())
+      .then((data) => {
+          // Actualizar el nombre del alumno en el HTML
+          nombreElement.textContent = data.nombre;
+
+          // Construir la tabla de asistencias
+          data.asistencias.forEach((asistencia) => {
+              const fila = document.createElement("tr");
+              fila.innerHTML = `
+                  <td>${data.nombre}</td>
+                  <td>${asistencia.fecha_hora}</td>
+              `;
+              tablaElement.appendChild(fila);
+          });
+
+          // Calcular y mostrar el porcentaje de asistencias
+          const porcentajeAsistencias = calcularPorcentajeAsistencias(data.asistencias);
+          porcentajeAsistenciaElement.textContent = porcentajeAsistencias;
+      })
+      .catch((error) => {
+          console.error("Error al obtener los datos:", error);
+      });
+
+  // Función para actualizar la asistencia en la base de datos
+  function actualizarAsistencia(idAsistenciaMateria, asistencia) {
+      // Hacer una solicitud AJAX para actualizar la asistencia en la base de datos
+      fetch(`actualizar_asistencia.php?id_asistencia_materia=${idAsistenciaMateria}&asistencia=${asistencia}`)
+          .then((response) => response.json())
+          .then((data) => {
+              // Manejar la respuesta si es necesario
+              console.log("Asistencia actualizada con éxito:", data);
+              // Recargar la página para reflejar los cambios
+              location.reload();
+          })
+          .catch((error) => {
+              console.error("Error al actualizar la asistencia:", error);
+          });
+  }
 </script>
 
 <script>
