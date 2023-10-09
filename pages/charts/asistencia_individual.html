@@ -914,45 +914,33 @@
 <!-- Page specific script -->
 <script>
   $(function () {
-    /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
-
-    //--------------
-    //- AREA CHART -
-    //--------------
-    var asistencias = 4;
-    var faltas = 2;
     var barChartData = {
-      labels  : ['Nombre'],
+      labels: ['Nombre'],
       datasets: [
         {
-          label               : 'Asistencias',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
+          label: 'Asistencias',
+          backgroundColor: 'rgba(60,141,188,0.9)',
+          borderColor: 'rgba(60,141,188,0.8)',
+          pointRadius: false,
+          pointColor: '#3b8bba',
+          pointStrokeColor: 'rgba(60,141,188,1)',
+          pointHighlightFill: '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [asistencias]
+          data: []
         },
         {
-          label               : 'Faltas',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
+          label: 'Faltas',
+          backgroundColor: 'rgba(210, 214, 222, 1)',
+          borderColor: 'rgba(210, 214, 222, 1)',
+          pointRadius: false,
+          pointColor: 'rgba(210, 214, 222, 1)',
+          pointStrokeColor: '#c1c7d1',
+          pointHighlightFill: '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [faltas]
+          data: []
         },
       ]
     }
-
-
 
     //---------------------
     //- STACKED BAR CHART -
@@ -961,8 +949,8 @@
     var stackedBarChartData = $.extend(true, {}, barChartData)
 
     var stackedBarChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false,
+      responsive: true,
+      maintainAspectRatio: false,
       scales: {
         xAxes: [{
           stacked: true,
@@ -973,12 +961,34 @@
       }
     }
 
-    new Chart(stackedBarChartCanvas, {
-      type: 'bar',
-      data: stackedBarChartData,
-      options: stackedBarChartOptions
-    })
-  })
+    // Obtener id_alumno y materia_id desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const alumnoId = urlParams.get("alumno_id");
+    const materiaId = urlParams.get("materia_id");
+
+    // Realizar una solicitud AJAX para obtener los datos de asistencia
+    $.ajax({
+      type: "GET",
+      url: "consulta_asistencia.php",
+      data: { alumno_id: alumnoId, materia_id: materiaId },
+      success: function (response) {
+        var data = JSON.parse(response);
+
+        if (data) {
+          stackedBarChartData.labels[0] = data.nombre_alumno;
+          stackedBarChartData.datasets[0].data[0] = data.asistencias;
+          stackedBarChartData.datasets[1].data[0] = data.faltas;
+
+          new Chart(stackedBarChartCanvas, {
+            type: 'bar',
+            data: stackedBarChartData,
+            options: stackedBarChartOptions
+          });
+        }
+      }
+    });
+  });
 </script>
+
 </body>
 </html>

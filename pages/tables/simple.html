@@ -925,7 +925,7 @@
                                                   ${materia.nombre_materia}
                                               </th>
                                               <th>
-                                                  <button class="ver-asistencia-materia" data-id="${materia.materia_id}">Ver asistencia de la materia</button>
+                                                  <button class="ver-asistencia-materia" data-materia-id="${materia.materia_id}">Ver asistencia de la materia</button>
                                               </th>
                                           </tr>
                                           <tr>
@@ -944,28 +944,9 @@
                               var row = document.createElement("tr");
                               row.innerHTML = `
                                   <td>${alumno.nombre_alumno}</td>
-                                  <td><button class="ver-asistencia-individual" data-id="${alumno.id_alumno}">Ver asistencia</button></td>
+                                  <td><button class="ver-asistencia-individual" data-alumno-id="${alumno.id_alumno}" data-materia-id="${materia.materia_id}">Ver asistencia</button></td>
                               `;
                               materiaTbody.appendChild(row);
-                          });
-
-                          var verButtonAsistenciaMateria = document.querySelectorAll(".ver-asistencia-materia");
-
-                          verButtonAsistenciaMateria.forEach(function (button) {
-                              button.addEventListener("click", function () {
-                                  var materiaId = this.getAttribute("data-id");
-                                  // Redirigir a la vista deseada con el id de la materia como parámetro
-                                  window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId);
-                              });
-                          });
-
-                          var verButtonAsistenciaIndividual = document.querySelectorAll(".ver-asistencia-individual");
-                          verButtonAsistenciaIndividual.forEach(function (button) {
-                              button.addEventListener("click", function () {
-                                  var alumnoId = this.getAttribute("data-id");
-                                  // Redirigir a la vista deseada con el id del alumno como parámetro
-                                  window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId);
-                              });
                           });
                       }
                   };
@@ -974,8 +955,23 @@
           }
       };
       xhr.send();
+
+      // Agregar eventos de clic para los botones de ver asistencia
+      materiasContainer.addEventListener("click", function (event) {
+          if (event.target.classList.contains("ver-asistencia-materia")) {
+              var materiaId = event.target.getAttribute("data-materia-id");
+              // Redirigir a la vista deseada con el id de la materia como parámetro
+              window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId);
+          } else if (event.target.classList.contains("ver-asistencia-individual")) {
+              var alumnoId = event.target.getAttribute("data-alumno-id");
+              var materiaId = event.target.getAttribute("data-materia-id");
+              // Redirigir a la vista deseada con los ids como parámetros
+              window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId) + "&materia_id=" + encodeURIComponent(materiaId);
+          }
+      });
   });
 </script>
+
 
 
 
