@@ -834,7 +834,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Materias</h1>
+            <h1>Grupos</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -906,7 +906,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             grupos.forEach(function (grupo) {
                 var row = document.createElement("tr");
-                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button><button class='ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td></td>";
+                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='btn btn-primary ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button><button class='btn btn-primary ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td></td>";
                 tbody.appendChild(row);
             });
 
@@ -917,7 +917,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 button.addEventListener("click", function () {
                     var grupoId = this.getAttribute("data-id");
                     // Redirigir a la vista deseada con el ID del grupo como parámetro
-                    window.location.href = "simple.html?id=" + grupoId;
+                    window.location.href = "simple.html?id=" + grupoId + "&id_maestro=" + idMaestro;
                 });
 
 

@@ -891,6 +891,7 @@
       // Obtener el grupo_id de la URL
       const urlParams = new URLSearchParams(window.location.search);
       const grupoId = urlParams.get("id");
+      var idMaestro = urlParams.get("id_maestro");
 
       // Obtener el contenedor de materias
       var materiasContainer = document.getElementById("materias-container");
@@ -905,7 +906,7 @@
               alumnos.forEach(function (alumno) {
                   // Para cada alumno, obtener las materias en las que está inscrito
                   var xhrMaterias = new XMLHttpRequest();
-                  xhrMaterias.open("GET", "get_materias_por_alumno.php?id_alumno=" + alumno.id_alumno, true);
+                  xhrMaterias.open("GET", "get_materias_por_alumno.php?id_alumno=" + alumno.id_alumno + "&id_maestro=" + idMaestro, true);
                   xhrMaterias.onreadystatechange = function () {
                       if (xhrMaterias.readyState === 4 && xhrMaterias.status === 200) {
                           var materias = JSON.parse(xhrMaterias.responseText);
@@ -917,7 +918,7 @@
                                   // Si no existe, crear la tabla
                                   materiaTable = document.createElement("table");
                                   materiaTable.id = materia.nombre_materia;
-                                  materiaTable.className = "table table-hover text-nowrap";
+                                  materiaTable.className = "table table-bordered";
                                   materiaTable.innerHTML = `
                                       <thead>
                                           <tr>
@@ -925,7 +926,7 @@
                                                   ${materia.nombre_materia}
                                               </th>
                                               <th>
-                                                  <button class="ver-asistencia-materia" data-materia-id="${materia.materia_id}">Ver asistencia de la materia</button>
+                                                  <button class="btn btn-primary ver-asistencia-materia" data-materia-id="${materia.materia_id}">Ver asistencia de la materia</button>
                                               </th>
                                           </tr>
                                           <tr>
@@ -944,7 +945,7 @@
                               var row = document.createElement("tr");
                               row.innerHTML = `
                                   <td>${alumno.nombre_alumno}</td>
-                                  <td><button class="ver-asistencia-individual" data-alumno-id="${alumno.id_alumno}" data-materia-id="${materia.materia_id}">Ver asistencia</button></td>
+                                  <td><button class="btn btn-primary ver-asistencia-individual" data-alumno-id="${alumno.id_alumno}" data-materia-id="${materia.materia_id}">Ver asistencia</button></td>
                               `;
                               materiaTbody.appendChild(row);
                           });
