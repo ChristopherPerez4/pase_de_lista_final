@@ -85,7 +85,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="../../index.html" class="nav-link" id="grupoMaestro">
+            <a href="../../index.html" class="nav-link">
               <p>Cerrar sesión</p>
             </a>
           </li>
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   button.addEventListener("click", function () {
                       var grupoId = this.getAttribute("data-id");
                       // Redirigir a la vista deseada con el ID del grupo como parámetro
-                      window.location.href = "../charts/flot.html?id=" + grupoId;
+                      window.location.href = "../charts/flot.html?id=" + grupoId + "&id_maestro=" + idMaestro;
                   });
                 });
 
