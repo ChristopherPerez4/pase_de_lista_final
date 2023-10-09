@@ -906,7 +906,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             grupos.forEach(function (grupo) {
                 var row = document.createElement("tr");
-                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button></td>";
+                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button><button class='ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td></td>";
                 tbody.appendChild(row);
             });
 
@@ -919,6 +919,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Redirigir a la vista deseada con el ID del grupo como parámetro
                     window.location.href = "simple.html?id=" + grupoId;
                 });
+
+
+
+                
+              var verButtonAsistencia = document.querySelectorAll(".ver-asistencia");
+              
+              verButtonAsistencia.forEach(function (button) {
+                  button.addEventListener("click", function () {
+                      var grupoId = this.getAttribute("data-id");
+                      // Redirigir a la vista deseada con el ID del grupo como parámetro
+                      window.location.href = "../charts/flot.html?id=" + grupoId;
+                  });
+                });
+
+
             });
         }
     };
