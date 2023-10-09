@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Materias_alumno</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="btn- wrapper">
+  <!-- Navbar -->
+  
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="../tables/simple3.html" class="brand-link" id="verMaterias">
+      <span class="brand-text font-weight-light">Sistema de Asistencia</span>
+    </a>
+    
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user (optional) -->
+
+
+      <!-- SidebarSearch Form -->
+
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a href="../../index.html" class="nav-link" id="grupoMaestro">
+              <p>Cerrar sesión</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Materias</h1>
+          </div>
+
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    
+<!-- Main content -->
+<section class="content">
+  <div class="card">
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="materiasTable" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Materia</th>
+            <th>Ver Asistencia</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var currentURL = window.location.href;
+    var idValue = obtenerValorDeParametro("id", currentURL);
+
+    var verMaterias = document.getElementById("verMaterias");
+    if (verMaterias && idValue !== null) {
+        var nuevaURL = "../tables/simple3.html?id=" + idValue;
+        verMaterias.setAttribute("href", nuevaURL);
+    }
+
+    // Función para obtener el valor de un parámetro de consulta de una URL
+    function obtenerValorDeParametro(nombre, url) {
+        var parametros = new URLSearchParams(new URL(url).search);
+        return parametros.get(nombre);
+    }
+
+    // Obtén el ID del alumno de la URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var idAlumno = urlParams.get("id");
+
+    // Referencia a la tabla
+    var materiasTable = document.getElementById("materiasTable").getElementsByTagName('tbody')[0];
+
+    // Realiza una solicitud AJAX para obtener las materias del alumno
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "get_materia_alumno.php?id=" + idAlumno, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Limpiar la tabla
+            materiasTable.innerHTML = "";
+
+            // Parsear la respuesta JSON
+            var materias = JSON.parse(xhr.responseText);
+
+            // Agregar las filas a la tabla
+            for (var i = 0; i < materias.length; i++) {
+                var materia = materias[i].nombre_materia;
+                var materiaId = materias[i].materia_id;
+                var row = "<tr><td>" + (i + 1) + "</td><td>" + materia + "</td><td><a class='button-link' href='../charts/asistencia_individual_alumno.html?id_alumno=" + idAlumno + "&materia_id=" + materiaId + "'>Ver Asistencia</a></td></tr>";
+                materiasTable.insertAdjacentHTML("beforeend", row);
+            }
+        }
+    };
+    xhr.send();
+});
+
+
+  </script>
+
+</body>
+</html>

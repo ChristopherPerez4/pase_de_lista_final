@@ -24,8 +24,10 @@ if ($primerCaracter === 'a') {
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
+        $alumno = $result->fetch_assoc();
+        $idUsuario = $alumno['id_alumno'];
         // Autenticación exitosa para alumno
-        header("Location: pages/tables/data.html");
+        header("Location: pages/tables/simple3.html?id=" . $idUsuario);
         exit();
     } else {
         // Autenticación fallida, redirigir al formulario de inicio de sesión
