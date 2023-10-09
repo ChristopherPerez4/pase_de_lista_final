@@ -61,29 +61,10 @@
           </a>
           </li>
           <li class="nav-item">
-            <a href="../forms/asignar_materia_alumnos.html" class="nav-link" id="materiaAlumno">
+            <a href="../forms/asignar_alumno.php" class="nav-link" id="materiaAlumno">
               <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Materia (Alumno)</p>
+              <p>Asignar Alumno</p>
           </a>
-          </li>
-          <li class="nav-item">
-            <a href="../forms/asignar_grupo_alumnos.html" class="nav-link" id="grupoAlumno">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Grupo (Alumno)</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="../forms/asignar_materia_maestros.html" class="nav-link" id="materiaMaestro">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Materia (Maestro)</p>
-          </a>
-          </li>
-          <li class="nav-item">
-            <a href="../forms/asignar_grupo_maestros.html" class="nav-link" id="grupoMaestro">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Grupo (Maestro)</p>
-            </a>
-          </li>
           <li class="nav-item">
             <a href="../../index.html" class="nav-link">
               <p>Cerrar sesión</p>
@@ -172,7 +153,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-            var currentURL = window.location.href;
+  var currentURL = window.location.href;
             var idValue = obtenerValorDeParametro("id", currentURL);
             
             // Actualizar el primer enlace
@@ -209,23 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             var materiaAlumno = document.getElementById("materiaAlumno");
             if (materiaAlumno && idValue !== null) {
-                var nuevaURL = "../forms/asignar_materia_alumnos.html?id=" + idValue;
+                var nuevaURL = "../forms/asignar_alumno.php?id=" + idValue;
                 materiaAlumno.setAttribute("href", nuevaURL);
-            }
-            var grupoAlumno = document.getElementById("grupoAlumno");
-            if (grupoAlumno && idValue !== null) {
-                var nuevaURL = "../forms/asignar_grupo_alumnos.html?id=" + idValue;
-                grupoAlumno.setAttribute("href", nuevaURL);
-            }
-            var materiaMaestro = document.getElementById("materiaMaestro");
-            if (materiaMaestro && idValue !== null) {
-                var nuevaURL = "../forms/asignar_materia_maestros.html?id=" + idValue;
-                materiaMaestro.setAttribute("href", nuevaURL);
-            }
-            var grupoMaestro = document.getElementById("grupoMaestro");
-            if (grupoMaestro && idValue !== null) {
-                var nuevaURL = "../forms/asignar_grupo_maestros.html?id=" + idValue;
-                grupoMaestro.setAttribute("href", nuevaURL);
             }
         
         // Función para obtener el valor de un parámetro de consulta de una URL

@@ -1,9 +1,34 @@
+<?php
+// Conexión a la base de datos (reemplaza con tus datos de conexión)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "rfid_db";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Obtener opciones de alumnos
+$sql_alumnos = "SELECT id_alumno, nombre FROM alumnos";
+$result_alumnos = $conn->query($sql_alumnos);
+
+// Obtener opciones de grupos
+$sql_grupos = "SELECT grupo_id, nombre_grupo FROM grupos";
+$result_grupos = $conn->query($sql_grupos);
+
+// Obtener opciones de materias
+$sql_materias = "SELECT materia_id, nombre_materia FROM materias";
+$result_materias = $conn->query($sql_materias);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grupos</title>
+  <title>Registrar Alumnos</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -84,7 +109,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Grupos</h1>
+            <h1>Asignar Alumno</h1>
           </div>
 
         </div>
@@ -95,18 +120,69 @@
     
 <!-- Main content -->
 <section class="content">
-  <div class="card">
-    <!-- /.card-header -->
-    <div class="card-body">
-      <table class="table table-bordered">
-          <tr>
-            <th style="width: 10px">#</th>
-            <th>Grupo</th>
-            <th>Ver</th>
-          </tr>
-      </table>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col">
+        <!-- general form elements -->
+        <form action="procesar_asignacion.php" method="POST">
+        <label for="id_alumno">Selecciona un Alumno:</label>
+        <select name="id_alumno" required>
+            <?php
+            if ($result_alumnos->num_rows > 0) {
+                while ($row_alumno = $result_alumnos->fetch_assoc()) {
+                    echo "<option value='" . $row_alumno['id_alumno'] . "'>" . $row_alumno['nombre'] . "</option>";
+                }
+            } else {
+                echo "<option value=''>No hay alumnos disponibles</option>";
+            }
+            ?>
+        </select><br><br>
+
+        <label for="grupo">Grupo:</label>
+        <select name="grupo" required>
+            <?php
+            if ($result_grupos->num_rows > 0) {
+                while ($row_grupo = $result_grupos->fetch_assoc()) {
+                    echo "<option value='" . $row_grupo['grupo_id'] . "'>" . $row_grupo['nombre_grupo'] . "</option>";
+                }
+            } else {
+                echo "<option value=''>No hay grupos disponibles</option>";
+            }
+            ?>
+        </select><br><br>
+
+        <label for="materias[]">Materias:</label>
+        <select name="materias[]" multiple required>
+            <?php
+            if ($result_materias->num_rows > 0) {
+                while ($row_materia = $result_materias->fetch_assoc()) {
+                    echo "<option value='" . $row_materia['materia_id'] . "'>" . $row_materia['nombre_materia'] . "</option>";
+                }
+            } else {
+                echo "<option value=''>No hay materias disponibles</option>";
+            }
+            ?>
+        </select><br><br>
+        
+        <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Asignar Alumno</button>
+            </div>
+    </form>
+        
+            <!-- /.card-body -->
+
+          </form>
+        </div>
+        <!-- /.card -->        
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!--/.col (right) -->
     </div>
-  </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
 </section>
     <!-- /.content -->
   </div>
@@ -131,7 +207,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var currentURL = window.location.href;
+            var currentURL = window.location.href;
             var idValue = obtenerValorDeParametro("id", currentURL);
             
             // Actualizar el primer enlace
@@ -177,54 +253,14 @@ document.addEventListener("DOMContentLoaded", function () {
             var parametros = new URLSearchParams(new URL(url).search);
             return parametros.get(nombre);
         }
-    var urlParams = new URLSearchParams(window.location.search);
-    var idMaestro = urlParams.get("id"); // Obtener el ID del maestro de la URL
-
-    // Realizar una solicitud AJAX para obtener los grupos del maestro
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "get_grupos.php?id_maestro=" + idMaestro, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var grupos = JSON.parse(xhr.responseText);
-            var table = document.querySelector("table");
-            var tbody = table.querySelector("tbody");
-
-            grupos.forEach(function (grupo) {
-                var row = document.createElement("tr");
-                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='btn btn-primary ver-grupo' data-id='" + grupo.grupo_id + "'>Ver Grupo</button><button class='btn btn-primary ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td></td>";
-                tbody.appendChild(row);
-            });
-
-            // Agregar manejadores de eventos para los botones "Ver Grupo"
-            var verButtonGrupo = document.querySelectorAll(".ver-grupo");
-
-            verButtonGrupo.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    var grupoId = this.getAttribute("data-id");
-                    // Redirigir a la vista deseada con el ID del grupo como parámetro
-                    window.location.href = "simple.html?id=" + grupoId + "&id_maestro=" + idMaestro;
-                });
-
-
-
-                
-              var verButtonAsistencia = document.querySelectorAll(".ver-asistencia");
-              
-              verButtonAsistencia.forEach(function (button) {
-                  button.addEventListener("click", function () {
-                      var grupoId = this.getAttribute("data-id");
-                      // Redirigir a la vista deseada con el ID del grupo como parámetro
-                      window.location.href = "../charts/flot.html?id=" + grupoId + "&id_maestro=" + idMaestro;
-                  });
-                });
-
-
-            });
-        }
-    };
     xhr.send();
-});  
+});
 </script>
 
 </body>
 </html>
+
+<?php
+// Cerrar la conexión a la base de datos
+$conn->close();
+?>
