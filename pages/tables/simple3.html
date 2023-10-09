@@ -37,7 +37,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="../../index.html" class="nav-link" id="grupoMaestro">
+            <a href="../../index.html" class="nav-link">
               <p>Cerrar sesión</p>
             </a>
           </li>
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
             for (var i = 0; i < materias.length; i++) {
                 var materia = materias[i].nombre_materia;
                 var materiaId = materias[i].materia_id;
-                var row = "<tr><td>" + (i + 1) + "</td><td>" + materia + "</td><td><a class='button-link' href='../charts/asistencia_individual_alumno.html?id_alumno=" + idAlumno + "&materia_id=" + materiaId + "'>Ver Asistencia</a></td></tr>";
+                var row = "<tr><td>" + (i + 1) + "</td><td>" + materia + "</td><td><a class='button-link' href='../charts/asistencia_individual_alumno.html?alumno_id=" + idAlumno + "&materia_id=" + materiaId + "'>Ver Asistencia</a></td></tr>";
                 materiasTable.insertAdjacentHTML("beforeend", row);
             }
         }

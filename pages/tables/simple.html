@@ -80,7 +80,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="../../index.html" class="nav-link" id="grupoMaestro">
+            <a href="../../index.html" class="nav-link">
               <p>Cerrar sesión</p>
             </a>
           </li>
@@ -280,12 +280,12 @@
           if (event.target.classList.contains("ver-asistencia-materia")) {
               var materiaId = event.target.getAttribute("data-materia-id");
               // Redirigir a la vista deseada con el id de la materia como parámetro
-              window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId);
+              window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
           } else if (event.target.classList.contains("ver-asistencia-individual")) {
               var alumnoId = event.target.getAttribute("data-alumno-id");
               var materiaId = event.target.getAttribute("data-materia-id");
               // Redirigir a la vista deseada con los ids como parámetros
-              window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId) + "&materia_id=" + encodeURIComponent(materiaId);
+              window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId) + "&materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
           }
       });
   });
