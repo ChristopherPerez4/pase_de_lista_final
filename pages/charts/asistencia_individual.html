@@ -847,41 +847,53 @@
       </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <div class="row">
-          <div class="col">
-
-            <!-- STACKED BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Asistencia individual</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
+          <div class="row">
+              <div class="col">
+                  <!-- STACKED BAR CHART -->
+                  <div class="card card-success">
+                      <div class="card-header">
+                          <h3 class="card-title">Asistencia individual</h3>
+                          <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                  <i class="fas fa-minus"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                  <i class="fas fa-times"></i>
+                              </button>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <div class="chart">
+                              <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                        <h5>Nombre: <span id="nombre"></span></h5>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Fecha/Hora</th>
+                                        <th>Asistencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-asistencias">
+                                    <!-- Aquí se llenarán las filas de la tabla de asistencias -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
               </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
           </div>
-          <!-- /.col (RIGHT) -->
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
+      </div>
+  </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -901,7 +913,7 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
@@ -910,84 +922,147 @@
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- Page specific script -->
 <script>
-  $(function () {
-    var barChartData = {
-      labels: ['Nombre'],
-      datasets: [
-        {
-          label: 'Asistencias',
-          backgroundColor: 'rgba(60,141,188,0.9)',
-          borderColor: 'rgba(60,141,188,0.8)',
-          pointRadius: false,
-          pointColor: '#3b8bba',
-          pointStrokeColor: 'rgba(60,141,188,1)',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data: []
-        },
-        {
-          label: 'Faltas',
-          backgroundColor: 'rgba(210, 214, 222, 1)',
-          borderColor: 'rgba(210, 214, 222, 1)',
-          pointRadius: false,
-          pointColor: 'rgba(210, 214, 222, 1)',
-          pointStrokeColor: '#c1c7d1',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data: []
-        },
-      ]
+$(function () {
+  var barChartData = {
+    labels: ['Nombre'],
+    datasets: [
+      {
+        label: 'Asistencias',
+        backgroundColor: 'rgba(60,141,188,0.9)',
+        borderColor: 'rgba(60,141,188,0.8)',
+        pointRadius: false,
+        pointColor: '#3b8bba',
+        pointStrokeColor: 'rgba(60,141,188,1)',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(60,141,188,1)',
+        data: []
+      },
+      {
+        label: 'Faltas',
+        backgroundColor: 'rgba(210, 214, 222, 1)',
+        borderColor: 'rgba(210, 214, 222, 1)',
+        pointRadius: false,
+        pointColor: 'rgba(210, 214, 222, 1)',
+        pointStrokeColor: '#c1c7d1',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(220,220,220,1)',
+        data: []
+      },
+    ]
+  }
+
+  //---------------------
+  //- STACKED BAR CHART -
+  //---------------------
+  var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+  var stackedBarChartData = $.extend(true, {}, barChartData)
+
+  var stackedBarChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }],
+      yAxes: [{
+        stacked: true
+      }]
     }
+  }
 
-    //---------------------
-    //- STACKED BAR CHART -
-    //---------------------
-    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-    var stackedBarChartData = $.extend(true, {}, barChartData)
+  // Obtener id_alumno y materia_id desde la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const alumnoId = urlParams.get("alumno_id");
+  const materiaId = urlParams.get("materia_id");
 
-    var stackedBarChartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        xAxes: [{
-          stacked: true,
-        }],
-        yAxes: [{
-          stacked: true
-        }]
+  // Realizar una solicitud AJAX para obtener los datos de asistencia
+  $.ajax({
+    type: "GET",
+    url: "consulta_asistencia.php",
+    data: { alumno_id: alumnoId, materia_id: materiaId },
+    success: function (response) {
+      var data = JSON.parse(response);
+
+      if (data) {
+        stackedBarChartData.labels[0] = data.nombre_alumno;
+        stackedBarChartData.datasets[0].data[0] = data.asistencias;
+        stackedBarChartData.datasets[1].data[0] = data.faltas;
+
+        new Chart(stackedBarChartCanvas, {
+          type: 'bar',
+          data: stackedBarChartData,
+          options: stackedBarChartOptions
+        });
       }
     }
-
-    // Obtener id_alumno y materia_id desde la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const alumnoId = urlParams.get("alumno_id");
-    const materiaId = urlParams.get("materia_id");
-
-    // Realizar una solicitud AJAX para obtener los datos de asistencia
-    $.ajax({
-      type: "GET",
-      url: "consulta_asistencia.php",
-      data: { alumno_id: alumnoId, materia_id: materiaId },
-      success: function (response) {
-        var data = JSON.parse(response);
-
-        if (data) {
-          stackedBarChartData.labels[0] = data.nombre_alumno;
-          stackedBarChartData.datasets[0].data[0] = data.asistencias;
-          stackedBarChartData.datasets[1].data[0] = data.faltas;
-
-          new Chart(stackedBarChartCanvas, {
-            type: 'bar',
-            data: stackedBarChartData,
-            options: stackedBarChartOptions
-          });
-        }
-      }
-    });
   });
+});
+
 </script>
+
+
+<script>
+// Obtener el parámetro del alumno_id y materia_id de la URL
+const urlParams = new URLSearchParams(window.location.search);
+const alumnoId = urlParams.get("alumno_id");
+const materiaId = urlParams.get("materia_id");
+
+// Obtener elementos HTML
+const nombreElement = document.getElementById("nombre");
+const tablaElement = document.getElementById("tabla-asistencias");
+
+// Hacer una solicitud AJAX para obtener los datos del servidor
+fetch(`consulta_asistencia_tabla.php?alumno_id=${alumnoId}&materia_id=${materiaId}`)
+    .then((response) => response.json())
+    .then((data) => {
+        // Actualizar el nombre del alumno en el HTML
+        nombreElement.textContent = data.nombre;
+
+        // Construir la tabla de asistencias
+        data.asistencias.forEach((asistencia) => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${data.nombre}</td>
+                <td>${asistencia.fecha_hora}</td>
+                <td>
+                    <input type="radio" name="asistencia_${asistencia.id_asistencia_materia}" value="1" ${asistencia.asistio === 'asistio' ? 'checked' : ''} onclick="actualizarAsistencia(${asistencia.id_asistencia_materia}, 1)">
+                    Asistió
+                    <input type="radio" name="asistencia_${asistencia.id_asistencia_materia}" value="0" ${asistencia.asistio === 'no_asistio' ? 'checked' : ''} onclick="actualizarAsistencia(${asistencia.id_asistencia_materia}, 0)">
+                    No Asistió
+                </td>
+            `;
+            tablaElement.appendChild(fila);
+        });
+    })
+    .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+    });
+
+// Función para actualizar la asistencia en la base de datos
+function actualizarAsistencia(idAsistenciaMateria, asistencia) {
+    // Hacer una solicitud AJAX para actualizar la asistencia en la base de datos
+    fetch(`actualizar_asistencia.php?id_asistencia_materia=${idAsistenciaMateria}&asistencia=${asistencia}`)
+        .then((response) => response.json())
+        .then((data) => {
+            // Manejar la respuesta si es necesario
+            console.log("Asistencia actualizada con éxito:", data);
+            // Recargar la página para reflejar los cambios
+            location.reload();
+        })
+        .catch((error) => {
+            console.error("Error al actualizar la asistencia:", error);
+        });
+}
+
+
+</script>
+
+
+
 
 </body>
 </html>

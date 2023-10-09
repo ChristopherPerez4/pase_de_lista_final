@@ -69,6 +69,15 @@ try {
         $faltas = $max_asistencias;
     }
 
+    // Nueva condición: Si el alumno tiene "0" en el campo "asistio" en la tabla "asistencia_materias", se considera falta.
+    $sql = "SELECT COUNT(*) as asistio_cero FROM asistencia_materias WHERE id_alumno = :alumno_id AND materia_id = :materia_id AND asistio = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':alumno_id', $alumno_id, PDO::PARAM_INT);
+    $stmt->bindParam(':materia_id', $materia_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $faltas += $row['asistio_cero'];
+
     // Preparar los datos para enviar como respuesta
     $resultado['nombre_alumno'] = $nombre_alumno;
     $resultado['asistencias'] = $asistencias;
