@@ -39,54 +39,34 @@
           </a>
           </li>
           <li class="nav-item">
-            <a href="../otra_pagina.html" class="nav-link" id="registrarAlumno">
+            <a href="../forms/registrar_alumnos.html" class="nav-link" id="registrarAlumno">
               <i class="far fa-circle nav-icon"></i>
               <p>Registrar Alumno</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="registrarMateria">
+            <a href="../forms/registrar_materias.html" class="nav-link" id="registrarMateria">
               <i class="far fa-circle nav-icon"></i>
               <p>Registrar Materia</p>
           </a>
           </li>
           <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="registrarGrupo">
+            <a href="../forms/registrar_grupos.html" class="nav-link" id="registrarGrupo">
               <i class="far fa-circle nav-icon"></i>
               <p>Registrar Grupo</p>
           </a>
           </li>
           <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="materiaAlumno">
+            <a href="../forms/asignar_alumno.php" class="nav-link" id="materiaAlumno">
               <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Materia (Alumno)</p>
+              <p>Asignar Alumno</p>
           </a>
-          </li>
-          <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="grupoAlumno">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Grupo (Alumno)</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="materiaMaestro">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Materia (Maestro)</p>
-          </a>
-          </li>
-          <li class="nav-item">
-            <a href="../tercera_pagina.html" class="nav-link" id="grupoMaestro">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Asignar Grupo (Maestro)</p>
-            </a>
-          </li>
           <li class="nav-item">
             <a href="../../index.html" class="nav-link">
               <p>Cerrar sesión</p>
             </a>
           </li>
         </ul>
-        
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -238,72 +218,54 @@
 </script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-            var currentURL = window.location.href;
-            var idValue = obtenerValorDeParametro("id_maestro", currentURL);
-            
-            // Actualizar el primer enlace
-            var verGrupos = document.getElementById("verGrupos");
-            if (verGrupos && idValue !== null) {
-                var nuevaURL = "../tables/simple2.html?id=" + idValue;
-                verGrupos.setAttribute("href", nuevaURL);
-            }
-
-            var verGrupos2 = document.getElementById("verGrupos2");
-            if (verGrupos2 && idValue !== null) {
-                var nuevaURL = "../tables/simple2.html?id=" + idValue;
-                verGrupos2.setAttribute("href", nuevaURL);
-            }
-            
-            // Actualizar el segundo enlace
-            var registrarAlumno = document.getElementById("registrarAlumno");
-            if (registrarAlumno && idValue !== null) {
-                var nuevaURL = "../otra_pagina.html?id=" + idValue;
-                registrarAlumno.setAttribute("href", nuevaURL);
-            }
-            
-            // Actualizar el tercer enlace
-            var registrarMateria = document.getElementById("registrarMateria");
-            if (registrarMateria && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                registrarMateria.setAttribute("href", nuevaURL);
-            }
-
-            var registrarGrupo = document.getElementById("registrarGrupo");
-            if (registrarGrupo && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                registrarGrupo.setAttribute("href", nuevaURL);
-            }
-            var materiaAlumno = document.getElementById("materiaAlumno");
-            if (materiaAlumno && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                materiaAlumno.setAttribute("href", nuevaURL);
-            }
-            var grupoAlumno = document.getElementById("grupoAlumno");
-            if (grupoAlumno && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                grupoAlumno.setAttribute("href", nuevaURL);
-            }
-            var materiaMaestro = document.getElementById("materiaMaestro");
-            if (materiaMaestro && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                materiaMaestro.setAttribute("href", nuevaURL);
-            }
-            var grupoMaestro = document.getElementById("grupoMaestro");
-            if (grupoMaestro && idValue !== null) {
-                var nuevaURL = "../tercera_pagina.html?id=" + idValue;
-                grupoMaestro.setAttribute("href", nuevaURL);
-            }
-        
-        // Función para obtener el valor de un parámetro de consulta de una URL
-        function obtenerValorDeParametro(nombre, url) {
-            var parametros = new URLSearchParams(new URL(url).search);
-            return parametros.get(nombre);
-        }
-    var urlParams = new URLSearchParams(window.location.search);
-    var idMaestro = urlParams.get("id"); // Obtener el ID del maestro de la URL
-});
-
-
+              var currentURL = window.location.href;
+              var idValue = obtenerValorDeParametro("id_maestro", currentURL);
+              
+              // Actualizar el primer enlace
+              var verGrupos = document.getElementById("verGrupos");
+              if (verGrupos && idValue !== null) {
+                  var nuevaURL = "../tables/simple2.html?id=" + idValue;
+                  verGrupos.setAttribute("href", nuevaURL);
+              }
+  
+              var verGrupos2 = document.getElementById("verGrupos2");
+              if (verGrupos2 && idValue !== null) {
+                  var nuevaURL = "../tables/simple2.html?id=" + idValue;
+                  verGrupos2.setAttribute("href", nuevaURL);
+              }
+              
+              // Actualizar el segundo enlace
+              var registrarAlumno = document.getElementById("registrarAlumno");
+              if (registrarAlumno && idValue !== null) {
+                  var nuevaURL = "../forms/registrar_alumnos.html?id=" + idValue;
+                  registrarAlumno.setAttribute("href", nuevaURL);
+              }
+              
+              // Actualizar el tercer enlace
+              var registrarMateria = document.getElementById("registrarMateria");
+              if (registrarMateria && idValue !== null) {
+                  var nuevaURL = "../forms/registrar_materias.html?id=" + idValue;
+                  registrarMateria.setAttribute("href", nuevaURL);
+              }
+  
+              var registrarGrupo = document.getElementById("registrarGrupo");
+              if (registrarGrupo && idValue !== null) {
+                  var nuevaURL = "../forms/registrar_grupos.html?id=" + idValue;
+                  registrarGrupo.setAttribute("href", nuevaURL);
+              }
+              var materiaAlumno = document.getElementById("materiaAlumno");
+              if (materiaAlumno && idValue !== null) {
+                  var nuevaURL = "../forms/asignar_alumno.php?id=" + idValue;
+                  materiaAlumno.setAttribute("href", nuevaURL);
+              }
+          
+          // Función para obtener el valor de un parámetro de consulta de una URL
+          function obtenerValorDeParametro(nombre, url) {
+              var parametros = new URLSearchParams(new URL(url).search);
+              return parametros.get(nombre);
+          }
+      xhr.send();
+  });
   </script>
 </body>
 </html>
