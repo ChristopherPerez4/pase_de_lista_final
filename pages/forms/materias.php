@@ -16,14 +16,28 @@ $nombre_materia = $_POST['nombre_materia'];
 $hora_inicio = $_POST['hora_inicio'];
 $hora_fin = $_POST['hora_fin'];
 
-// Insertar la nueva materia en la base de datos
-$sql = "INSERT INTO materias (nombre_materia, hora_inicio, hora_fin) VALUES ('$nombre_materia', '$hora_inicio', '$hora_fin')";
+// Verificar si el nombre de la materia ya existe en la tabla "materias"
+$checkMateriaQuery = "SELECT nombre_materia FROM materias WHERE nombre_materia = '$nombre_materia'";
+$resultMateria = $conn->query($checkMateriaQuery);
 
-if ($conn->query($sql) === TRUE) {
-    $response = array("success" => true, "message" => "Los datos se han guardado correctamente");
+if ($resultMateria->num_rows > 0) {
+    // El nombre de la materia ya está registrado
+    $response = array("success" => false, "message" => "Error: El nombre de la materia ya está registrado");
     echo json_encode($response);
 } else {
-    echo "Error al crear la materia: " . $conn->error;
+    // El nombre de la materia no existe, se puede insertar el nuevo registro
+    $sql = "INSERT INTO materias (nombre_materia, hora_inicio, hora_fin) VALUES ('$nombre_materia', '$hora_inicio', '$hora_fin')";
+
+    // Ejecutar la consulta SQL para insertar los datos
+    if ($conn->query($sql) === TRUE) {
+        // Después de guardar los datos con éxito
+        $response = array("success" => true, "message" => "Los datos se han guardado correctamente");
+        echo json_encode($response);
+    } else {
+        // Error al insertar
+        $response = array("success" => false, "message" => "Error al crear la materia: " . $conn->error);
+        echo json_encode($response);
+    }
 }
 
 $conn->close();
