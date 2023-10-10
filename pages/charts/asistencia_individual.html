@@ -107,15 +107,15 @@
                 <div class="chart">
                   <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                   <div>
-                    <!-- Se muestra el porcentaje de asistencia con un h5 -->
+                    <!-- Se muestra el porcentaje de asistencia e inasistencia con h5 -->
                     <h5>Porcentaje de asistencia: <span id="porcentaje-asistencia"></span>%</h5>
+                    <h5>Porcentaje de inasistencia: <span id="porcentaje-inasistencia"></span>%</h5>
                   </div>
                 </div>
               </div>
               <div class="card-body">
                 <h5>Nombre: <span id="nombre"></span></h5>
               </div>
-    
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-striped table-bordered table-hover">
@@ -214,11 +214,13 @@ $(function () {
     }
   }
 
-  // Función para actualizar el porcentaje de asistencia
+  // Función para actualizar el porcentaje de asistencia e inasistencia
   function actualizarPorcentajeAsistencia(asistencias, faltas) {
     const totalAsistencias = asistencias + faltas;
-    const porcentaje = totalAsistencias > 0 ? (asistencias / totalAsistencias) * 100 : 0;
-    document.getElementById("porcentaje-asistencia").textContent = porcentaje.toFixed(2);
+    const porcentajeAsistencia = totalAsistencias > 0 ? (asistencias / totalAsistencias) * 100 : 0;
+    const porcentajeInasistencia = 100 - porcentajeAsistencia;
+    document.getElementById("porcentaje-asistencia").textContent = porcentajeAsistencia.toFixed(2);
+    document.getElementById("porcentaje-inasistencia").textContent = porcentajeInasistencia.toFixed(2);
   }
 
   // Obtener id_alumno y materia_id desde la URL
@@ -245,7 +247,7 @@ $(function () {
           options: stackedBarChartOptions
         });
 
-        // Actualizar el porcentaje de asistencia
+        // Actualizar el porcentaje de asistencia e inasistencia
         actualizarPorcentajeAsistencia(data.asistencias, data.faltas);
       }
     }
