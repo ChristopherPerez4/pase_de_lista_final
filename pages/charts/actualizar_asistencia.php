@@ -18,7 +18,10 @@ $id_asistencia_materia = $_GET['id_asistencia_materia'];
 $asistencia = $_GET['asistencia'];
 
 // Actualizar la asistencia en la base de datos
-$sql = "UPDATE asistencia_materias SET asistio = '$asistencia' WHERE id_asistencia_materia = $id_asistencia_materia";
+$sql = "UPDATE asistencia_materias am
+        JOIN asistencia a ON am.id_asistencia_materia = a.id_asistencia
+        SET am.asistio = '$asistencia', a.asistio = '$asistencia'
+        WHERE am.id_asistencia_materia = $id_asistencia_materia";
 
 if ($conn->query($sql) === TRUE) {
     $response = array('mensaje' => 'Asistencia actualizada con éxito');
