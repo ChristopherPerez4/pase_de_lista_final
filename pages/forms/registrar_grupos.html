@@ -119,6 +119,22 @@
               <button type="submit" class="btn btn-primary">Registrar</button>
             </div>
           </form>
+          <div class="modal fade" id="miModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Mensaje de éxito</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Los datos se han guardado correctamente.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+          </div>
         </div>
         <!-- /.card -->        
           <!-- /.card-body -->
@@ -206,6 +222,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
   </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const modal = document.getElementById("miModal");
+    
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault();
+    
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch("grupos.php", {
+                        method: "POST",
+                        body: formData,
+                    });
+    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            // Mostrar el modal
+                            modal.classList.add("show");
+                            modal.style.display = "block";
+                            document.body.classList.add("modal-open");
+                        } else {
+                            alert("Error al guardar los datos: " + data.message);
+                        }
+                    } else {
+                        alert("Error en la solicitud al servidor");
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud al servidor: " + error);
+                }
+            });
+    
+            // Cerrar el modal cuando se hace clic en el botón de cierre
+            modal.querySelector(".close").addEventListener("click", function () {
+                cerrarModal();
+            });
+    
+            // Cerrar el modal cuando se hace clic en el botón "Cerrar" del modal
+            modal.querySelector(".btn-default").addEventListener("click", function () {
+                cerrarModal();
+            });
+    
+            // Cerrar el modal cuando se hace clic fuera del modal
+            modal.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    cerrarModal();
+                }
+            });
+    
+            // Función para cerrar el modal
+            function cerrarModal() {
+                modal.classList.remove("show");
+                modal.style.display = "none";
+                document.body.classList.remove("modal-open");
+            }
+        });
+        </script>
 
 </body>
 </html>

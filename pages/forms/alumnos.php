@@ -24,11 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Preparar la consulta SQL para insertar los datos en la tabla "alumnos"
     $sql = "INSERT INTO alumnos (nombre, apellidos, matricula, nip, uid)
-            VALUES ('$nombre', '$apellidos', '$matricula', '$nip', '$uid')";
+    VALUES ('$nombre', '$apellidos', CONCAT('a', '$matricula'), '$nip', '$uid')";
+
 
     // Ejecutar la consulta SQL
     if ($conn->query($sql) === TRUE) {
-        echo "Los datos se han guardado correctamente.";
+        // Después de guardar los datos con éxito
+        $response = array("success" => true, "message" => "Los datos se han guardado correctamente");
+        echo json_encode($response);
     } else {
         echo "Error al guardar los datos: " . $conn->error;
     }

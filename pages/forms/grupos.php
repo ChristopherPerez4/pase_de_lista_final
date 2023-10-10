@@ -18,7 +18,8 @@ $nombre_grupo = $_POST['nombre_grupo'];
 $sql = "INSERT INTO grupos (nombre_grupo) VALUES ('$nombre_grupo')";
 
 if ($conn->query($sql) === TRUE) {
-    echo "Grupo creado exitosamente.";
+    $response = array("success" => true, "message" => "Los datos se han guardado correctamente");
+    echo json_encode($response);
 } else {
     echo "Error al crear el grupo: " . $conn->error;
 }
