@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             grupos.forEach(function (grupo) {
                 var row = document.createElement("tr");
-                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='btn btn-primary ver-grupo' data-id='" + grupo.grupo_id + "' data-maestro-id='" + idMaestro + "'>Ver Grupo</button><button class='btn btn-primary ver-asistencia' data-id='" + grupo.grupo_id + "'>Ver asistencia</button></td></td>";
+                row.innerHTML = "<td>" + grupo.grupo_id + "</td><td>" + grupo.nombre_grupo + "</td><td><button class='btn btn-primary ver-grupo' data-id='" + grupo.grupo_id + "' data-maestro-id='" + idMaestro + "'>Ver Grupo</button><button class='btn btn-primary ver-asistencia' data-id='" + grupo.grupo_id + "' data-maestro-id='" + idMaestro + "'>Ver asistencia</button></td></td>";
                 tbody.appendChild(row);
             });
 
@@ -233,10 +233,29 @@ document.addEventListener("DOMContentLoaded", function () {
             verButtonAsistencia.forEach(function (button) {
                 button.addEventListener("click", function () {
                     var grupoId = this.getAttribute("data-id");
-                    // Redirigir a la vista deseada con el ID del grupo como parámetro
-                    window.location.href = "../charts/flot.html?id=" + grupoId + "&id_maestro=" + idMaestro;
+                    var maestroId = this.getAttribute("data-maestro-id"); // Obtener el ID del maestro desde el botón
+                    // Realizar una solicitud AJAX para ejecutar la función corte_asistencia.php
+                    $.ajax({
+                        url: "corte_asistencia.php",
+                        type: "GET",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: { grupo_id: grupoId, id_maestro: maestroId },
+                        success: function (response) {
+                            // Manejar la respuesta del servidor, si es necesario
+                            console.log("ID del maestro: " + maestroId);
+
+                            console.log(response);
+                            
+                            // Redirigir a la vista deseada con el ID del grupo y del maestro como parámetros
+                            window.location.href = "../charts/flot.html?id=" + grupoId + "&id_maestro=" + maestroId;
+                        },
+                        error: function (xhr, status, error) {
+                            // Manejar errores, si es necesario
+                            console.error(error);
+                        }
                 });
             });
+          });
         }
     };
     xhr.send();

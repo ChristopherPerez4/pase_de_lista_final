@@ -171,9 +171,9 @@
             var parametros = new URLSearchParams(new URL(url).search);
             return parametros.get(nombre);
         }
-      const urlParams = new URLSearchParams(window.location.search);
-      const grupoId = urlParams.get("id");
-      var idMaestro = urlParams.get("id_maestro");
+        const urlParams = new URLSearchParams(window.location.search);
+        const grupoId = urlParams.get("id");
+        const idMaestro = urlParams.get("id_maestro"); // Obtener el ID del maestro desde la URL
 
       // Obtener el contenedor de materias
       var materiasContainer = document.getElementById("materias-container");
@@ -209,7 +209,7 @@
                                                   
                                               </th>
                                               <th>
-                                                  <button class="btn btn-warning ver-asistencia-materia" data-materia-id="${materia.materia_id}">Ver asistencia de la materia</button>
+                                                  <button class="btn btn-warning ver-asistencia-materia" data-materia-id="${materia.materia_id}" data-maestro-id="${idMaestro}">Ver asistencia de la materia</button>
                                               </th>
                                           </tr>
                                           <tr>
@@ -228,7 +228,7 @@
                               var row = document.createElement("tr");
                               row.innerHTML = `
                                   <td>${alumno.nombre_alumno}</td>
-                                  <td><button class="btn btn-primary ver-asistencia-individual" data-alumno-id="${alumno.id_alumno}" data-materia-id="${materia.materia_id}">Ver asistencia</button></td>
+                                  <td><button class="btn btn-primary ver-asistencia-individual" data-alumno-id="${alumno.id_alumno}" data-materia-id="${materia.materia_id}" data-maestro-id="${idMaestro}">Ver asistencia</button></td>
                               `;
                               materiaTbody.appendChild(row);
                           });
@@ -239,21 +239,63 @@
           }
       };
       xhr.send();
-
+      
       // Agregar eventos de clic para los botones de ver asistencia
-      materiasContainer.addEventListener("click", function (event) {
-          if (event.target.classList.contains("ver-asistencia-materia")) {
-              var materiaId = event.target.getAttribute("data-materia-id");
-              // Redirigir a la vista deseada con el id de la materia como parámetro
-              window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
-          } else if (event.target.classList.contains("ver-asistencia-individual")) {
-              var alumnoId = event.target.getAttribute("data-alumno-id");
-              var materiaId = event.target.getAttribute("data-materia-id");
-              // Redirigir a la vista deseada con los ids como parámetros
-              window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId) + "&materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
-          }
+  materiasContainer.addEventListener("click", function (event) {
+    if (event.target.classList.contains("ver-asistencia-materia")) {
+      var materiaId = event.target.getAttribute("data-materia-id");
+      // Redirigir a la vista deseada con el id de la materia como parámetro
+      // ...
+
+      // Realizar una solicitud AJAX para ejecutar la función corte_asistencia.php
+      $.ajax({
+        url: "corte_asistencia.php",
+        type: "GET",
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: { grupo_id: grupoId, id_maestro: idMaestro }, // Agregar el parámetro id_maestro
+        success: function (response) {
+          // Manejar la respuesta del servidor, si es necesario
+          console.log("ID del maestro: " + idMaestro);
+
+          console.log(response);
+
+          // Redirigir a la vista deseada con el ID del grupo y del maestro como parámetros
+          window.location.href = "../charts/asistencia_materia.html?materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
+        },
+        error: function (xhr, status, error) {
+          // Manejar errores, si es necesario
+          console.error(error);
+        }
       });
+    } else if (event.target.classList.contains("ver-asistencia-individual")) {
+      var alumnoId = event.target.getAttribute("data-alumno-id");
+      var materiaId = event.target.getAttribute("data-materia-id");
+      // Redirigir a la vista deseada con los ids como parámetros
+      // ...
+
+      // Realizar una solicitud AJAX para ejecutar la función corte_asistencia.php
+      $.ajax({
+        url: "corte_asistencia.php",
+        type: "GET",
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: { grupo_id: grupoId, id_maestro: idMaestro }, // Agregar el parámetro id_maestro
+        success: function (response) {
+          // Manejar la respuesta del servidor, si es necesario
+          console.log("ID del maestro: " + idMaestro);
+
+          console.log(response);
+
+          // Redirigir a la vista deseada con el ID del grupo y del maestro como parámetros
+          window.location.href = "../charts/asistencia_individual.html?alumno_id=" + encodeURIComponent(alumnoId) + "&materia_id=" + encodeURIComponent(materiaId) + "&id_maestro=" + encodeURIComponent(idMaestro);
+        },
+        error: function (xhr, status, error) {
+          // Manejar errores, si es necesario
+          console.error(error);
+        }
+      });
+    }
   });
+});
 </script>
 
 
